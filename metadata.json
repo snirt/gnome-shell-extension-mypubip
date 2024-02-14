@@ -1,0 +1,8 @@
+{
+  "name": "MyPubIP",
+  "description": "A simple extension that let the user to view and copy the public IPv4 and IPv6 address.",
+  "uuid": "mypubip@snirt",
+  "shell-version": [
+    "45"
+  ]
+}
