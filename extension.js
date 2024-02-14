@@ -34,32 +34,29 @@ const newMenuItem = (label) => {
 
 const Indicator = GObject.registerClass(
     class Indicator extends PanelMenu.Button {
-        
-        
+
         fetchIPs(uri) {
             return new Promise(async (resolve, reject) => {
-                try{
+                try {
                     const message = Soup.Message.new('GET', uri);
                     const session = new Soup.Session();
                     const bytes = await session.send_and_read_async(
                         message,
                         GLib.PRIORITY_DEFAULT,
                         null,
-                        );
-                        
-                        if (message.get_status() != Soup.Status.OK) {
-                            console.log(`HTTP Status ${message.status_code}`);
-                        }
-                        
-                        const textDecoder = new TextDecoder("utf-8");
-                        const publicIP = textDecoder.decode(bytes.toArray());
-                        // Main.notify(`Your public IP is: ${publicIP}`);
-                        console.log("Response: " + publicIP);
-                        resolve(publicIP);
-                    } catch(e) {
-                        reject(e);
+                    );
+
+                    if (message.get_status() != Soup.Status.OK) {
+                        console.log(`HTTP Status ${message.status_code}`);
+                    }
+
+                    const textDecoder = new TextDecoder("utf-8");
+                    const publicIP = textDecoder.decode(bytes.toArray());
+                    console.log("Response: " + publicIP);
+                    resolve(publicIP);
+                } catch (e) {
+                    reject(e);
                 }
-                
             });
         }
 
@@ -67,61 +64,49 @@ const Indicator = GObject.registerClass(
             try {
                 const ipv4str = await this.fetchIPs(URI_PUBLIC_IP_V4);
                 const ipv6str = await this.fetchIPs(URI_PUBLIC_IP_V6);
-                
+
                 itemIPv4.label.set_text(ipv4str);
                 itemIPv6.label.set_text(ipv6str);
                 Main.notify(_("Your public IP list is refreshed!\n To copy, click the item"));
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
                 return
             }
-            // console.log(`Refreshing... ${itemIPv4.label} ${itemIPv6.label}`);
-            // this.fetchIPs(URI_PUBLIC_IP_V4).then((ipv4str) => {
-                //     itemIPv4.set_label(new St.Label(ipv4str));
-                // });
-                // this.fetchIPs(URI_PUBLIC_IP_V6).then((ipv6str) => {
-                    //     itemIPv6.set_label(new St.Label(ipv6str));
-                    // });
-                    
-                    // this.fetchIPs(this.itemIPv6);
-                }
-                
-                
-                
-                _init() {
-                    super._init(0.0, _('MyPubIP'));
-                    // menu items
-                    this.refreshItem = newMenuItem('Refresh');
-                    this.itemIPv4 = newMenuItem('Fetching IPv4...');
-                    this.itemIPv6 = newMenuItem('Fetching IPv6...');
+        }
 
-                    this.refreshItem.connect('activate', async () => this.refresh(this.itemIPv4, this.itemIPv6));
-                    this.menu.addMenuItem(this.refreshItem);
-                    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-                    this.menu.addMenuItem(this.itemIPv4);
-                    this.menu.addMenuItem(this.itemIPv6);
-                    
-                    this.add_child(new St.Icon({
-                        icon_name: 'network-server-symbolic',
-                        style_class: 'system-status-icon',
-                    }));
-                    
-                    // for api v4
-                    this.fetchIPs(URI_PUBLIC_IP_V4).then((ipv4str) => {
-                        this.ipv4str = ipv4str;
-                        console.log(ipv4str);
-                        this.itemIPv4.label.set_text(ipv4str);
-                        this.itemIPv4.connect('activate', async () => {
-                            console.log("Response: " + this.ipv4str);
-                            Main.notify(_(`Your public IPv4: ${this.ipv4str}, copied to clipboard`));
-                            St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.ipv4str);
-                        })
-                        // this.menu.addMenuItem(itemIPv4);
-                    }).catch(e => {
-                        console.log("Error: could not fetch public IP address: " + e);
-                    });
-                    
-                    // for api v6
+        _init() {
+            super._init(0.0, _('MyPubIP'));
+            // menu items
+            this.refreshItem = newMenuItem('Refresh');
+            this.itemIPv4 = newMenuItem('Fetching IPv4...');
+            this.itemIPv6 = newMenuItem('Fetching IPv6...');
+
+            this.refreshItem.connect('activate', async () => this.refresh(this.itemIPv4, this.itemIPv6));
+            this.menu.addMenuItem(this.refreshItem);
+            this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            this.menu.addMenuItem(this.itemIPv4);
+            this.menu.addMenuItem(this.itemIPv6);
+
+            this.add_child(new St.Icon({
+                icon_name: 'network-server-symbolic',
+                style_class: 'system-status-icon',
+            }));
+
+            // for api v4
+            this.fetchIPs(URI_PUBLIC_IP_V4).then((ipv4str) => {
+                this.ipv4str = ipv4str;
+                console.log(ipv4str);
+                this.itemIPv4.label.set_text(ipv4str);
+                this.itemIPv4.connect('activate', async () => {
+                    console.log("Response: " + this.ipv4str);
+                    Main.notify(_(`Your public IPv4: ${this.ipv4str}, copied to clipboard`));
+                    St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.ipv4str);
+                })
+            }).catch(e => {
+                console.log("Error: could not fetch public IP address: " + e);
+            });
+
+            // for api v6
             this.fetchIPs(URI_PUBLIC_IP_V6).then((ipv6str) => {
                 this.ipv6str = ipv6str;
                 console.log(ipv6str);
@@ -131,12 +116,9 @@ const Indicator = GObject.registerClass(
                     Main.notify(_(`Your public IPv6: ${this.ipv6str} copied to clipboard`));
                     St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.ipv6str);
                 })
-                // this.menu.addMenuItem(itemIPv6);
             }).catch(e => {
                 console.log("Error: could not fetch public IP address: " + e);
             });
-
-            // this.refresh(this.itemIPv4, this.itemIPv6); 
         }
     });
 
