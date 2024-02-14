@@ -9,10 +9,7 @@ MyPubIP is a simple extension that allows the user to view and copy the public I
 ## Installation
 
 1. Download the MyPubIP extension files to your local machine.
-2. Open the Gnome Shell Extensions application.
-3. Click on the settings icon, then select "Install from a file".
-4. Choose the downloaded MyPubIP extension file and click "Open".
-5. The MyPubIP extension should now be installed and ready to use.
+2. Extract the extension to your Gnome Shell extension directory - `~/.local/share/gnome-shell/extensions`
 
 ## Usage
 
@@ -33,3 +30,7 @@ To uninstall the MyPubIP extension:
 ## License
 
 This extension is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+## Author
+
+[snirt](https://github.com/snirt)
