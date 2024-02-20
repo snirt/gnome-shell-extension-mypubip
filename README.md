@@ -2,7 +2,7 @@
 
 ## Description
 
-MyPubIP is a simple extension that allows the user to view and copy the public IPv4 and IPv6 address.
+MyPubIP is a simple extension that allows the user to view and copy the public IPv4 and IPv6 address, by using ipify.org services.
 
 ![Screenshot](/screenshots/MyPubIP_screenshot.png)
 
