@@ -3,7 +3,8 @@
   "description": "A simple extension that let the user to view and copy the public IPv4 and IPv6 address, by using ipify.org services.",
   "uuid": "mypubip@snirt",
   "shell-version": [
-    "45"
+    "45",
+    "46"
   ],
   "url": "https://github.com/snirt/gnome-shell-extension-mypubip"
 }
